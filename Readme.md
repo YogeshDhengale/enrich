@@ -3,6 +3,7 @@
 A scalable Node.js service that handles data fetching from multiple external vendors with different characteristics (rate limits, sync/async responses) through a unified API.
 
 ## 📋 Table of Contents
+
 - [Architecture Overview](#architecture-overview)
 - [Project Structure](#project-structure)
 - [Quick Start](#quick-start)
@@ -33,6 +34,7 @@ A scalable Node.js service that handles data fetching from multiple external ven
 ```
 
 **Key Components:**
+
 - **API Server**: Express.js REST API with job creation and status endpoints
 - **Background Worker**: Processes jobs from Redis queue with rate limiting
 - **Mock Vendors**: Two test vendors (synchronous and asynchronous)
@@ -42,7 +44,7 @@ A scalable Node.js service that handles data fetching from multiple external ven
 ## 📁 Project Structure
 
 ```
-multi-vendor-service/
+enrich/
 ├── src/
 │   ├── api/
 │   │   ├── controllers/
@@ -103,11 +105,13 @@ multi-vendor-service/
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js 18+ and npm
 - Docker and Docker Compose
 - Git
 
 ### Option 1: Docker (Recommended)
+
 ```bash
 # Clone the repository
 git clone https://github.com/YogeshDhengale/enrich.git
@@ -124,6 +128,7 @@ curl http://localhost:3000/health
 ```
 
 ### Option 2: Local Development
+
 ```bash
 # Install dependencies
 npm install
@@ -149,6 +154,7 @@ npm run dev:vendors
 ## 💻 Local Development
 
 ### Development Commands
+
 ```bash
 # Install dependencies
 npm install
@@ -175,6 +181,7 @@ npm start
 ```
 
 ### Environment Variables
+
 Create a `.env` file based:
 
 ```env
@@ -206,6 +213,7 @@ API_KEY=your-api-key-here
 ### Core Endpoints
 
 #### 1. Create Job
+
 ```http
 POST /api/v1/jobs
 Content-Type: application/json
@@ -220,6 +228,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "request_id": "550e8400-e29b-41d4-a716-446655440000"
@@ -227,11 +236,13 @@ Content-Type: application/json
 ```
 
 #### 2. Get Job Status
+
 ```http
 GET /api/v1/jobs/{request_id}
 ```
 
 **Response (Processing):**
+
 ```json
 {
   "status": "processing",
@@ -240,6 +251,7 @@ GET /api/v1/jobs/{request_id}
 ```
 
 **Response (Complete):**
+
 ```json
 {
   "status": "complete",
@@ -253,6 +265,7 @@ GET /api/v1/jobs/{request_id}
 ```
 
 #### 3. Vendor Webhook
+
 ```http
 POST /api/v1/vendor-webhook/{vendor}
 Content-Type: application/json
@@ -265,11 +278,13 @@ Content-Type: application/json
 ```
 
 #### 4. Health Check
+
 ```http
 GET /health
 ```
 
 ### cURL Examples
+
 ```bash
 # Create a job
 curl -X POST http://localhost:3000/api/v1/jobs \
@@ -286,6 +301,7 @@ curl http://localhost:3000/health
 ## 🔧 Load Testing
 
 ### Using k6
+
 ```bash
 # Install k6
 npm install -g k6
@@ -298,6 +314,7 @@ k6 run --vus 200 --duration 60s tests/load/load-test.js
 ```
 
 ### Using Apache Bench
+
 ```bash
 # Test POST endpoint (create jobs)
 ab -n 1000 -c 50 -T application/json -p tests/load/job-payload.json \
@@ -308,11 +325,12 @@ ab -n 1000 -c 50 http://localhost:3000/api/v1/jobs/test-id
 ```
 
 ### Sample Load Test Results
+
 ```
 Requests:      10,000
 Duration:      60s
 Rate:          166.67 req/s
-Latency:       
+Latency:
   p50: 45ms
   p95: 120ms
   p99: 250ms
@@ -322,6 +340,7 @@ Success Rate:  99.8%
 ## 🚀 Deployment
 
 ### Docker Production Deployment
+
 ```bash
 # Build production image
 docker build -f docker/Dockerfile -t multi-vendor-service:latest .
@@ -336,57 +355,64 @@ docker-compose -f docker/docker-compose.prod.yml up -d --scale worker=3
 ## ⚙️ Configuration
 
 ### Rate Limiting Configuration
+
 ```javascript
 // src/config/rateLimits.js
 module.exports = {
   syncVendor: {
     requests: 10,
-    window: '1m'
+    window: "1m",
   },
   asyncVendor: {
     requests: 5,
-    window: '1m'
-  }
+    window: "1m",
+  },
 };
 ```
 
 ### Worker Configuration
+
 ```javascript
 // src/config/worker.js
 module.exports = {
   concurrency: 5,
   retryAttempts: 3,
   retryDelay: 1000,
-  jobTimeout: 30000
+  jobTimeout: 30000,
 };
 ```
 
 ### MongoDB Indexes
+
 ```javascript
 // Ensure proper indexing for performance
-db.jobs.createIndex({ "request_id": 1 }, { unique: true })
-db.jobs.createIndex({ "status": 1, "created_at": 1 })
-db.jobs.createIndex({ "created_at": 1 }, { expireAfterSeconds: 86400 })
+db.jobs.createIndex({ request_id: 1 }, { unique: true });
+db.jobs.createIndex({ status: 1, created_at: 1 });
+db.jobs.createIndex({ created_at: 1 }, { expireAfterSeconds: 86400 });
 ```
 
 ## 🧪 Testing
 
 ### Unit Tests
+
 ```bash
 npm run test:unit
 ```
 
 ### Integration Tests
+
 ```bash
 npm run test:integration
 ```
 
 ### End-to-End Tests
+
 ```bash
 npm run test:e2e
 ```
 
 ### Test Coverage
+
 ```bash
 npm run test:coverage
 ```
@@ -394,6 +420,7 @@ npm run test:coverage
 ## 📊 Monitoring
 
 ### Metrics Collection
+
 - Request/response times
 - Queue depth
 - Error rates
@@ -401,17 +428,19 @@ npm run test:coverage
 - Rate limit usage
 
 ### Logging
+
 ```javascript
 // Structured logging with Winston
-logger.info('Job processed', {
+logger.info("Job processed", {
   jobId: job.id,
   vendor: job.vendor,
   duration: Date.now() - job.startTime,
-  status: 'complete'
+  status: "complete",
 });
 ```
 
 ### Health Checks
+
 ```http
 GET /health
 GET /health/detailed

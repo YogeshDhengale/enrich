@@ -1,32 +1,32 @@
-const Bull = require('bull');
-const config = require('../config');
-const logger = require('./logger');
+const Bull = require("bull");
+const config = require("../config");
+const logger = require("./logger");
 
 // Create job queue
-const jobQueue = new Bull('job processing', config.redis.url, {
+const jobQueue = new Bull("job processing", config.redis.url, {
   defaultJobOptions: {
     removeOnComplete: 100,
     removeOnFail: 50,
-    attempts: 1
-  }
+    attempts: 1,
+  },
 });
 
 async function addJobToQueue(jobData) {
   try {
     const job = await jobQueue.add(jobData, {
-      priority: jobData.vendor === 'sync' ? 1 : 2, // Higher priority for sync jobs
-      delay: 0
+      priority: jobData.vendor === "sync" ? 1 : 2, // Higher priority for sync jobs
+      delay: 0,
     });
-    
+
     logger.info(`Job added to queue`, {
       jobId: job.id,
       requestId: jobData.requestId,
-      vendor: jobData.vendor
+      vendor: jobData.vendor,
     });
-    
+
     return job;
   } catch (error) {
-    logger.error('Failed to add job to queue:', error);
+    logger.error("Failed to add job to queue:", error);
     throw error;
   }
 }
@@ -42,10 +42,10 @@ async function getQueueStats() {
       waiting: waiting.length,
       active: active.length,
       completed: completed.length,
-      failed: failed.length
+      failed: failed.length,
     };
   } catch (error) {
-    logger.error('Failed to get queue stats:', error);
+    logger.error("Failed to get queue stats:", error);
     throw error;
   }
 }
@@ -53,5 +53,5 @@ async function getQueueStats() {
 module.exports = {
   jobQueue,
   addJobToQueue,
-  getQueueStats
+  getQueueStats,
 };

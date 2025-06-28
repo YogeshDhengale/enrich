@@ -13,7 +13,7 @@ const jobQueue = new Bull("job processing", config.redis.url);
 const syncVendorLimiter = new RateLimiter("sync", config.rateLimits.syncVendor);
 const asyncVendorLimiter = new RateLimiter(
   "async",
-  config.rateLimits.asyncVendor
+  config.rateLimits.asyncVendor,
 );
 
 // Process jobs
@@ -68,7 +68,7 @@ jobQueue.process(config.worker.concurrency, async (bullJob) => {
           {
             delay,
             attempts: 1,
-          }
+          },
         );
         logger.info(`Job ${requestId} scheduled for retry`, {
           attempt: job.attempts + 1,

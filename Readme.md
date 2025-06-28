@@ -118,11 +118,11 @@ multi-vendor-service/
 ### Option 1: Docker (Recommended)
 ```bash
 # Clone the repository
-git clone <your-repo-url>
-cd multi-vendor-service
+git clone https://github.com/YogeshDhengale/enrich.git
+cd enrich
 
 # Copy environment file
-cp .env.example .env
+cp .env
 
 # Start all services
 docker-compose up -d
@@ -183,7 +183,7 @@ npm start
 ```
 
 ### Environment Variables
-Create a `.env` file based on `.env.example`:
+Create a `.env` file based:
 
 ```env
 NODE_ENV=development
@@ -341,85 +341,6 @@ docker-compose -f docker/docker-compose.prod.yml up -d
 docker-compose -f docker/docker-compose.prod.yml up -d --scale worker=3
 ```
 
-### Vercel Deployment
-
-1. **Setup Vercel Project:**
-```bash
-npm install -g vercel
-vercel login
-vercel init
-```
-
-2. **Configure `vercel.json`:**
-```json
-{
-  "version": 2,
-  "builds": [
-    {
-      "src": "src/app.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "src/app.js"
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
-}
-```
-
-3. **Deploy:**
-```bash
-# Set environment variables
-vercel env add MONGODB_URI
-vercel env add REDIS_URL
-
-# Deploy
-vercel --prod
-```
-
-### Netlify Deployment
-
-1. **Install Netlify CLI:**
-```bash
-npm install -g netlify-cli
-netlify login
-```
-
-2. **Configure `netlify.toml`:**
-```toml
-[build]
-  command = "npm run build"
-  publish = "dist"
-
-[build.environment]
-  NODE_VERSION = "18"
-
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
-  status = 200
-
-[functions]
-  directory = "netlify/functions"
-```
-
-3. **Deploy:**
-```bash
-# Build for Netlify
-npm run build:netlify
-
-# Deploy
-netlify deploy --prod
-```
-
-### AWS/GCP/Azure Deployment
-See `docs/deployment.md` for detailed cloud deployment guides.
-
 ## ⚙️ Configuration
 
 ### Rate Limiting Configuration
@@ -518,21 +439,8 @@ GET /health/detailed
 - **ESLint + Prettier**: Code formatting
 - **Husky**: Git hooks
 - **Jest**: Testing framework
-- **Nodemon**: Hot reload
 - **Winston**: Logging
 - **Joi**: Input validation
-
-## 📝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
-
-## 📄 License
-
-MIT License - see LICENSE file for details
 
 ## 🆘 Support
 

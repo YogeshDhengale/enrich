@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Multi-Vendor Service Deployment Script
+# Enrich Deployment Script
 set -e
 
 echo "Starting deployment..."

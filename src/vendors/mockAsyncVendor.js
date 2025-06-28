@@ -1,6 +1,6 @@
-const axios = require('axios');
-const config = require('../config');
-const logger = require('../utils/logger');
+const axios = require("axios");
+const config = require("../config");
+const logger = require("../utils/logger");
 
 class MockAsyncVendor {
   constructor() {
@@ -12,21 +12,25 @@ class MockAsyncVendor {
   async fetchData(data, requestId) {
     try {
       logger.info(`Calling async vendor for job ${requestId}`);
-      
-      const response = await axios.post(this.baseUrl, {
-        requestId,
-        data,
-        webhookUrl: this.webhookUrl
-      }, {
-        timeout: this.timeout,
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Request-ID': requestId
-        }
-      });
+
+      const response = await axios.post(
+        this.baseUrl,
+        {
+          requestId,
+          data,
+          webhookUrl: this.webhookUrl,
+        },
+        {
+          timeout: this.timeout,
+          headers: {
+            "Content-Type": "application/json",
+            "X-Request-ID": requestId,
+          },
+        },
+      );
 
       logger.info(`Async vendor accepted job ${requestId}`, {
-        status: response.status
+        status: response.status,
       });
 
       return response.data;

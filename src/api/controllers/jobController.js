@@ -1,8 +1,8 @@
-const { v4: uuidv4 } = require('uuid');
-const Job = require('../../models/job');
-const { addJobToQueue } = require('../../utils/queue');
-const logger = require('../../utils/logger');
-const { validateJobPayload } = require('../middleware/validator');
+const { v4: uuidv4 } = require("uuid");
+const Job = require("../../models/job");
+const { addJobToQueue } = require("../../utils/queue");
+const logger = require("../../utils/logger");
+const { validateJobPayload } = require("../middleware/validator");
 
 class JobController {
   // Create a new job
@@ -12,8 +12,8 @@ class JobController {
       const { error, value } = validateJobPayload(req.body);
       if (error) {
         return res.status(400).json({
-          error: 'Validation Error',
-          details: error.details.map(d => d.message)
+          error: "Validation Error",
+          details: error.details.map((d) => d.message),
         });
       }
 
@@ -25,7 +25,7 @@ class JobController {
         requestId,
         vendor,
         originalData: data,
-        status: 'pending'
+        status: "pending",
       });
 
       await job.save();
@@ -34,22 +34,22 @@ class JobController {
       await addJobToQueue({
         requestId: job.requestId,
         vendor: job.vendor,
-        data: job.originalData
+        data: job.originalData,
       });
 
-      logger.info('Job created successfully', {
+      logger.info("Job created successfully", {
         requestId: job.requestId,
-        vendor: job.vendor
+        vendor: job.vendor,
       });
 
       res.status(201).json({
-        request_id: job.requestId
+        request_id: job.requestId,
       });
     } catch (error) {
-      logger.error('Error creating job:', error);
+      logger.error("Error creating job:", error);
       res.status(500).json({
-        error: 'Internal Server Error',
-        message: 'Failed to create job'
+        error: "Internal Server Error",
+        message: "Failed to create job",
       });
     }
   }
@@ -62,32 +62,32 @@ class JobController {
       const job = await Job.findByRequestId(request_id);
       if (!job) {
         return res.status(404).json({
-          error: 'Not Found',
-          message: 'Job not found'
+          error: "Not Found",
+          message: "Job not found",
         });
       }
 
       const response = {
         status: job.status,
-        created_at: job.createdAt.toISOString()
+        created_at: job.createdAt.toISOString(),
       };
 
-      if (job.status === 'complete') {
+      if (job.status === "complete") {
         response.result = job.result;
         response.completed_at = job.processingCompletedAt?.toISOString();
-      } else if (job.status === 'failed') {
-        response.error = job.error?.message || 'Unknown error occurred';
+      } else if (job.status === "failed") {
+        response.error = job.error?.message || "Unknown error occurred";
         response.completed_at = job.processingCompletedAt?.toISOString();
-      } else if (job.status === 'processing') {
+      } else if (job.status === "processing") {
         response.processing_started_at = job.processingStartedAt?.toISOString();
       }
 
       res.json(response);
     } catch (error) {
-      logger.error('Error fetching job:', error);
+      logger.error("Error fetching job:", error);
       res.status(500).json({
-        error: 'Internal Server Error',
-        message: 'Failed to fetch job'
+        error: "Internal Server Error",
+        message: "Failed to fetch job",
       });
     }
   }
@@ -97,20 +97,20 @@ class JobController {
     try {
       const stats = await Job.getJobStats();
       const formattedStats = {};
-      
-      stats.forEach(stat => {
+
+      stats.forEach((stat) => {
         formattedStats[stat._id] = stat.count;
       });
 
       res.json({
         statistics: formattedStats,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     } catch (error) {
-      logger.error('Error fetching job stats:', error);
+      logger.error("Error fetching job stats:", error);
       res.status(500).json({
-        error: 'Internal Server Error',
-        message: 'Failed to fetch statistics'
+        error: "Internal Server Error",
+        message: "Failed to fetch statistics",
       });
     }
   }

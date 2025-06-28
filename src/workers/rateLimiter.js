@@ -1,5 +1,5 @@
-const redis = require('../config/redis');
-const logger = require('../utils/logger');
+const redis = require("../config/redis");
+const logger = require("../utils/logger");
 
 class RateLimiter {
   constructor(vendorName, options) {
@@ -22,14 +22,16 @@ class RateLimiter {
 
       if (currentCount >= this.requests) {
         // Find when the oldest request will expire
-        const oldestRequests = await redis.zrange(this.key, 0, 0, 'WITHSCORES');
+        const oldestRequests = await redis.zrange(this.key, 0, 0, "WITHSCORES");
         if (oldestRequests.length > 0) {
           const oldestTime = parseInt(oldestRequests[1]);
           const waitTime = oldestTime + this.window - now;
-          
+
           if (waitTime > 0) {
-            logger.info(`Rate limit reached for ${this.vendorName}, waiting ${waitTime}ms`);
-            await new Promise(resolve => setTimeout(resolve, waitTime));
+            logger.info(
+              `Rate limit reached for ${this.vendorName}, waiting ${waitTime}ms`,
+            );
+            await new Promise((resolve) => setTimeout(resolve, waitTime));
             return this.waitForSlot(); // Recursive call after waiting
           }
         }
@@ -41,9 +43,8 @@ class RateLimiter {
 
       logger.debug(`Rate limit slot acquired for ${this.vendorName}`, {
         currentCount: currentCount + 1,
-        maxRequests: this.requests
+        maxRequests: this.requests,
       });
-
     } catch (error) {
       logger.error(`Rate limiter error for ${this.vendorName}:`, error);
       // If Redis fails, continue without rate limiting
@@ -54,11 +55,14 @@ class RateLimiter {
     try {
       const now = Date.now();
       const windowStart = now - this.window;
-      
+
       await redis.zremrangebyscore(this.key, 0, windowStart);
       return await redis.zcard(this.key);
     } catch (error) {
-      logger.error(`Failed to get current count for ${this.vendorName}:`, error);
+      logger.error(
+        `Failed to get current count for ${this.vendorName}:`,
+        error,
+      );
       return 0;
     }
   }

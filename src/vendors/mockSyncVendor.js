@@ -1,6 +1,6 @@
-const axios = require('axios');
-const config = require('../config');
-const logger = require('../utils/logger');
+const axios = require("axios");
+const config = require("../config");
+const logger = require("../utils/logger");
 
 class MockSyncVendor {
   constructor() {
@@ -11,20 +11,24 @@ class MockSyncVendor {
   async fetchData(data, requestId) {
     try {
       logger.info(`Calling sync vendor for job ${requestId}`);
-      
-      const response = await axios.post(this.baseUrl, {
-        requestId,
-        data
-      }, {
-        timeout: this.timeout,
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Request-ID': requestId
-        }
-      });
+
+      const response = await axios.post(
+        this.baseUrl,
+        {
+          requestId,
+          data,
+        },
+        {
+          timeout: this.timeout,
+          headers: {
+            "Content-Type": "application/json",
+            "X-Request-ID": requestId,
+          },
+        },
+      );
 
       logger.info(`Sync vendor responded for job ${requestId}`, {
-        status: response.status
+        status: response.status,
       });
 
       return response.data;

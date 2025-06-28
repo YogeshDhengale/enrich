@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "Multi-Vendor Service",
+    "name": "Enrich",
     "description": "API collection for testing the multi-vendor data fetch service",
     "version": "1.0.0"
   },

@@ -1,4 +1,4 @@
-const logger = require('./logger');
+const logger = require("./logger");
 
 // Data cleaning and processing utilities
 class DataProcessor {
@@ -22,7 +22,7 @@ class DataProcessor {
       processedData._metadata = {
         processedAt: new Date().toISOString(),
         vendorType,
-        version: '1.0'
+        version: "1.0",
       };
 
       logger.info(`Data processing completed for ${vendorType} vendor`);
@@ -35,14 +35,22 @@ class DataProcessor {
 
   static removePII(data) {
     const piiFields = [
-      'ssn', 'social_security_number', 'credit_card', 'password',
-      'secret', 'private_key', 'api_key', 'token'
+      "ssn",
+      "social_security_number",
+      "credit_card",
+      "password",
+      "secret",
+      "private_key",
+      "api_key",
+      "token",
     ];
 
     return this.recursiveClean(data, (key, value) => {
-      if (typeof key === 'string' && piiFields.some(field => 
-        key.toLowerCase().includes(field))) {
-        return '[REDACTED]';
+      if (
+        typeof key === "string" &&
+        piiFields.some((field) => key.toLowerCase().includes(field))
+      ) {
+        return "[REDACTED]";
       }
       return value;
     });
@@ -50,7 +58,7 @@ class DataProcessor {
 
   static trimStrings(data) {
     return this.recursiveClean(data, (key, value) => {
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         return value.trim();
       }
       return value;
@@ -59,35 +67,35 @@ class DataProcessor {
 
   static normalizeData(data, vendorType) {
     // Vendor-specific normalization
-    if (vendorType === 'sync') {
+    if (vendorType === "sync") {
       return {
         ...data,
-        source: 'sync_vendor',
-        responseTime: 'immediate'
+        source: "sync_vendor",
+        responseTime: "immediate",
       };
-    } else if (vendorType === 'async') {
+    } else if (vendorType === "async") {
       return {
         ...data,
-        source: 'async_vendor',
-        responseTime: 'delayed'
+        source: "async_vendor",
+        responseTime: "delayed",
       };
     }
     return data;
   }
 
   static recursiveClean(obj, cleanFunction) {
-    if (obj === null || typeof obj !== 'object') {
+    if (obj === null || typeof obj !== "object") {
       return obj;
     }
 
     if (Array.isArray(obj)) {
-      return obj.map(item => this.recursiveClean(item, cleanFunction));
+      return obj.map((item) => this.recursiveClean(item, cleanFunction));
     }
 
     const result = {};
     for (const [key, value] of Object.entries(obj)) {
       const cleanedValue = cleanFunction(key, value);
-      if (cleanedValue !== null && typeof cleanedValue === 'object') {
+      if (cleanedValue !== null && typeof cleanedValue === "object") {
         result[key] = this.recursiveClean(cleanedValue, cleanFunction);
       } else {
         result[key] = cleanedValue;
@@ -98,5 +106,5 @@ class DataProcessor {
 }
 
 module.exports = {
-  processVendorData: DataProcessor.processVendorData.bind(DataProcessor)
+  processVendorData: DataProcessor.processVendorData.bind(DataProcessor),
 };

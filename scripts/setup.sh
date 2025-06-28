@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Multi-Vendor Service Setup Script
-echo "Setting up Multi-Vendor Service..."
+# Enrich Setup Script
+echo "Setting up Enrich..."
 
 # Check if Docker is installed
 if ! command -v docker &> /dev/null; then

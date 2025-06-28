@@ -1,12 +1,12 @@
-const request = require('supertest');
-const mongoose = require('mongoose');
-const app = require('../../src/app');
-const Job = require('../../src/models/job');
+const request = require("supertest");
+const mongoose = require("mongoose");
+const app = require("../../src/app");
+const Job = require("../../src/models/job");
 
-describe('API Integration Tests', () => {
+describe("API Integration Tests", () => {
   beforeAll(async () => {
     // Connect to test database
-    await mongoose.connect('mongodb://localhost:27017/multivendor_test');
+    await mongoose.connect("mongodb://localhost:27017/multivendor_test");
   });
 
   afterAll(async () => {
@@ -18,12 +18,12 @@ describe('API Integration Tests', () => {
     await Job.deleteMany({});
   });
 
-  describe('Job Flow', () => {
-    it('should create job, process it, and return result', async () => {
+  describe("Job Flow", () => {
+    it("should create job, process it, and return result", async () => {
       // Create job
       const createResponse = await request(app)
-        .post('/jobs')
-        .send({ testData: 'value' })
+        .post("/jobs")
+        .send({ testData: "value" })
         .expect(200);
 
       const requestId = createResponse.body.request_id;
@@ -34,16 +34,16 @@ describe('API Integration Tests', () => {
         .get(`/jobs/${requestId}`)
         .expect(200);
 
-      expect(statusResponse.body.status).toBe('pending');
+      expect(statusResponse.body.status).toBe("pending");
 
       // Simulate job processing
       await Job.findOneAndUpdate(
         { requestId },
-        { 
-          status: 'complete',
+        {
+          status: "complete",
           result: { processed: true },
-          completedAt: new Date()
-        }
+          completedAt: new Date(),
+        },
       );
 
       // Check final status
@@ -51,32 +51,32 @@ describe('API Integration Tests', () => {
         .get(`/jobs/${requestId}`)
         .expect(200);
 
-      expect(finalResponse.body.status).toBe('complete');
+      expect(finalResponse.body.status).toBe("complete");
       expect(finalResponse.body.result).toEqual({ processed: true });
     });
   });
 
-  describe('Webhook Tests', () => {
-    it('should handle async vendor webhook', async () => {
+  describe("Webhook Tests", () => {
+    it("should handle async vendor webhook", async () => {
       const job = new Job({
-        requestId: 'test-webhook',
-        status: 'processing',
-        vendor: 'async',
-        payload: { test: 'data' }
+        requestId: "test-webhook",
+        status: "processing",
+        vendor: "async",
+        payload: { test: "data" },
       });
       await job.save();
 
       await request(app)
-        .post('/vendor-webhook/async')
+        .post("/vendor-webhook/async")
         .send({
-          requestId: 'test-webhook',
-          result: { webhookData: 'received' }
+          requestId: "test-webhook",
+          result: { webhookData: "received" },
         })
         .expect(200);
 
-      const updatedJob = await Job.findOne({ requestId: 'test-webhook' });
-      expect(updatedJob.status).toBe('complete');
-      expect(updatedJob.result.webhookData).toBe('received');
+      const updatedJob = await Job.findOne({ requestId: "test-webhook" });
+      expect(updatedJob.status).toBe("complete");
+      expect(updatedJob.result.webhookData).toBe("received");
     });
   });
 });

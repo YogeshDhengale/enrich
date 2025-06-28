@@ -1,19 +1,19 @@
-const Joi = require('joi');
+const Joi = require("joi");
 
 const jobPayloadSchema = Joi.object({
-  vendor: Joi.string().valid('sync', 'async').required(),
-  data: Joi.object().required()
+  vendor: Joi.string().valid("sync", "async").required(),
+  data: Joi.object().required(),
 });
 
 const webhookPayloadSchema = Joi.object({
   job_id: Joi.string().required(),
-  status: Joi.string().valid('complete', 'failed').required(),
-  data: Joi.object().when('status', {
-    is: 'complete',
+  status: Joi.string().valid("complete", "failed").required(),
+  data: Joi.object().when("status", {
+    is: "complete",
     then: Joi.required(),
-    otherwise: Joi.optional()
+    otherwise: Joi.optional(),
   }),
-  error: Joi.string().optional()
+  error: Joi.string().optional(),
 });
 
 function validateJobPayload(payload) {
@@ -26,5 +26,5 @@ function validateWebhookPayload(payload) {
 
 module.exports = {
   validateJobPayload,
-  validateWebhookPayload
+  validateWebhookPayload,
 };

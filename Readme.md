@@ -92,8 +92,6 @@ enrich/
 ├── docker/
 │   ├── Dockerfile
 │   ├── docker-compose.yml
-│   ├── docker-compose.prod.yml
-│   └── nginx.conf
 ├── package.json
 ├── package-lock.json
 ├── .env.example
@@ -207,6 +205,13 @@ LOG_LEVEL=info
 JWT_SECRET=your-jwt-secret-here
 API_KEY=your-api-key-here
 ```
+
+## 🆘 Postman collection
+
+- Check the documentation in `/docs`
+- Review the Postman collection for API examples
+
+---
 
 ## 📚 API Documentation
 
@@ -462,12 +467,6 @@ GET /health/detailed
 - **Jest**: Testing framework
 - **Winston**: Logging
 - **Joi**: Input validation
-
-## 🆘 Support
-
-- Create an issue on GitHub
-- Check the documentation in `/docs`
-- Review the Postman collection for API examples
 
 ---
 

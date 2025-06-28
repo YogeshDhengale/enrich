@@ -92,14 +92,6 @@ multi-vendor-service/
 │   ├── docker-compose.yml
 │   ├── docker-compose.prod.yml
 │   └── nginx.conf
-├── docs/
-│   ├── api.md
-│   ├── deployment.md
-│   └── postman-collection.json
-├── .github/
-│   └── workflows/
-│       ├── ci.yml
-│       └── deploy.yml
 ├── package.json
 ├── package-lock.json
 ├── .env.example

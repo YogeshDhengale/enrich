@@ -224,3 +224,5 @@
 {"level":"info","message":"SIGINT received, shutting down gracefully","service":"multi-vendor-service","timestamp":"2025-06-28T12:00:10.259Z"}
 {"level":"info","message":"Connected to MongoDB","service":"multi-vendor-service","timestamp":"2025-06-28T12:00:22.623Z"}
 {"environment":"development","level":"info","message":"Server running on port 3000","port":"3000","service":"multi-vendor-service","timestamp":"2025-06-28T12:00:22.637Z"}
+{"level":"info","message":"Connected to MongoDB","service":"multi-vendor-service","timestamp":"2025-06-28T12:24:12.685Z"}
+{"environment":"development","level":"info","message":"Server running on port 3000","port":"3000","service":"multi-vendor-service","timestamp":"2025-06-28T12:24:12.696Z"}

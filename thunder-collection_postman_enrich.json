@@ -1,0 +1,177 @@
+{
+    "info": {
+        "_postman_id": "a63bcf17-c7d9-4d84-b37e-369d61bf9b4e",
+        "name": "enrich",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "Create job",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/api/v1/jobs",
+                    "path": [
+                        "api",
+                        "v1",
+                        "jobs"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"vendor\": \"sync\",\n  \"data\": {\n    \"userId\": \"123456\",\n    \"query\": \"user-profileer\"\n  }\n}"
+                }
+            }
+        },
+        {
+            "name": "Get job",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/api/v1/jobs/3f278787-41c5-4120-9d77-af750cf110d1",
+                    "path": [
+                        "api",
+                        "v1",
+                        "jobs",
+                        "3f278787-41c5-4120-9d77-af750cf110d1"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"vendor\": \"sync\",\n  \"data\": {\n    \"userId\": \"\",\n    \"query\": \"user-profile\"\n  }\n}"
+                }
+            }
+        },
+        {
+            "name": "Create async job",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/api/v1/jobs",
+                    "path": [
+                        "api",
+                        "v1",
+                        "jobs"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"vendor\": \"sync\",\n  \"data\": {\n    \"userId\": \"123456\",\n    \"query\": \"user-profileer\"\n  }\n}"
+                }
+            }
+        },
+        {
+            "name": "Handle vendor webhooks",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/api/v1/vendor-webhook/sync",
+                    "path": [
+                        "api",
+                        "v1",
+                        "vendor-webhook",
+                        "sync"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"job_id\": \"3f278787-41c5-4120-9d77-af750cf110d1\",\n  \"status\": \"complete\",\n  \"data\": {\n    \"result\": \"whatever your mock vendor should return\"\n  }\n}\n"
+                }
+            }
+        },
+        {
+            "name": "Get Health",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/health",
+                    "path": [
+                        "health"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"vendor\": \"sync\",\n  \"data\": {\n    \"userId\": \"\",\n    \"query\": \"user-profile\"\n  }\n}"
+                }
+            }
+        },
+        {
+            "name": "Get Detailed Health check Copy",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/health/detailed",
+                    "path": [
+                        "health",
+                        "detailed"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"vendor\": \"sync\",\n  \"data\": {\n    \"userId\": \"\",\n    \"query\": \"user-profile\"\n  }\n}"
+                }
+            }
+        }
+    ]
+}

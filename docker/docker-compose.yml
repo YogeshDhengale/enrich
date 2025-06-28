@@ -4,24 +4,24 @@ services:
   # MongoDB Database
   mongodb:
     image: mongo:7.0
-    container_name: multi-vendor-mongodb
+    container_name: enrich-mongodb
     restart: unless-stopped
     ports:
       - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
-      MONGO_INITDB_DATABASE: multi-vendor-service
+      MONGO_INITDB_DATABASE: enrich-service
     volumes:
       - mongodb_data:/data/db
       - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
-      - multi-vendor-network
+      - enrich-network
 
   # Redis Cache and Queue
   redis:
     image: redis:7.2-alpine
-    container_name: multi-vendor-redis
+    container_name: enrich-redis
     restart: unless-stopped
     ports:
       - "6379:6379" #your host port
@@ -29,7 +29,7 @@ services:
     volumes:
       - redis_data:/data
     networks:
-      - multi-vendor-network
+      - enrich-network
 
   # Main API Server
   api:
@@ -37,14 +37,14 @@ services:
       context: .
       dockerfile: docker/Dockerfile
       target: production
-    container_name: multi-vendor-api
+    container_name: enrich-api
     restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
       NODE_ENV: production #Your Environment
       PORT: 3000 #Your backend hosted port
-      MONGODB_URI: mongodb://admin:password@mongodb:27017/multi-vendor-service?authSource=admin #Your monogoDB URI
+      MONGODB_URI: mongodb://admin:password@mongodb:27017/enrich-service?authSource=admin #Your monogoDB URI
       REDIS_URL: redis://:redispassword@redis:6379 #Your redis URI
       SYNC_VENDOR_RATE_LIMIT: 10 
       ASYNC_VENDOR_RATE_LIMIT: 5
@@ -54,7 +54,7 @@ services:
     volumes:
       - ./logs:/app/logs
     networks:
-      - multi-vendor-network
+      - enrich-network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
       interval: 30s

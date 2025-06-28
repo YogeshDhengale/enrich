@@ -1,5 +1,5 @@
 {
-  "name": "multi-vendor-service",
+  "name": "enrich",
   "version": "1.0.0",
   "description": "A scalable multi-vendor data fetch service",
   "main": "src/app.js",
@@ -79,7 +79,7 @@
     "api",
     "vendor-integration"
   ],
-  "author": "Your Name",
+  "author": "Yogesh Dhengale",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0",

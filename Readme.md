@@ -168,9 +168,6 @@ npm run lint
 npm run lint:fix
 npm run format
 
-# Build for production
-npm run build
-
 # Start production server
 npm start
 ```

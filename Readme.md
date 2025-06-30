@@ -100,15 +100,13 @@ enrich/
 └── README.md
 ```
 
-## 🚀 Quick Start
+## 🚀 How to run project
 
 ### Prerequisites
 
 - Node.js 18+ and npm
-- Docker and Docker Compose
-- Git
 
-### Option 1: Docker (Recommended)
+### 1: Clone git repo and create the Enviroment
 
 ```bash
 # Clone the repository
@@ -118,38 +116,37 @@ cd enrich
 # Copy environment file
 cp .env
 
-# Start all services
-docker-compose up -d
-
 # Check service health
 curl http://localhost:3000/health
 ```
 
-### Option 2: Local Development
+### 2. Environment Variables
 
-```bash
-# Install dependencies
-npm install
+Create a `.env` file based:
 
-# Start MongoDB and Redis (using Docker)
-docker-compose up -d mongodb redis
+```env
+NODE_ENV=development
+PORT=3000
+WORKER_PORT=3001
+VENDOR_PORT=3002
 
-# Set environment variables
-export NODE_ENV=development
-export MONGODB_URI=mongodb://localhost:27017/multi-vendor-service
-export REDIS_URL=redis://localhost:6379
+# Database
+MONGODB_URI=mongodb://localhost:27017/multi-vendor-service
 
-# Start the API server
-npm run dev:api
+# Redis
+REDIS_URL=redis://localhost:6379
 
-# Start the worker (in another terminal)
-npm run dev:worker
+# Rate Limiting
+SYNC_VENDOR_RATE_LIMIT=10
+ASYNC_VENDOR_RATE_LIMIT=5
 
-# Start mock vendors (in another terminal)
-npm run dev:vendors
+# Logging
+LOG_LEVEL=info
+
+# Security
+JWT_SECRET=your-jwt-secret-here
+API_KEY=your-api-key-here
 ```
-
-## 💻 Local Development
 
 ### Development Commands
 
@@ -176,34 +173,6 @@ npm run build
 
 # Start production server
 npm start
-```
-
-### Environment Variables
-
-Create a `.env` file based:
-
-```env
-NODE_ENV=development
-PORT=3000
-WORKER_PORT=3001
-VENDOR_PORT=3002
-
-# Database
-MONGODB_URI=mongodb://localhost:27017/multi-vendor-service
-
-# Redis
-REDIS_URL=redis://localhost:6379
-
-# Rate Limiting
-SYNC_VENDOR_RATE_LIMIT=10
-ASYNC_VENDOR_RATE_LIMIT=5
-
-# Logging
-LOG_LEVEL=info
-
-# Security
-JWT_SECRET=your-jwt-secret-here
-API_KEY=your-api-key-here
 ```
 
 ## 🆘 Postman collection
